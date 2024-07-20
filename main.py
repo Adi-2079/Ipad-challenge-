@@ -76,3 +76,84 @@ questions = [
     # Add more rates and ratio questions here
 ]
 
+# Start button class
+class Button:
+    def __init__(self, x, y, width, height, text, text_color, button_color):
+        self.rect = pygame.Rect(x, y, width, height)
+        self.text = text
+        self.text_color = text_color
+        self.button_color = button_color
+    
+    def draw(self):
+        pygame.draw.rect(screen, self.button_color, self.rect)
+        
+        button_text = font.render(self.text, True, self.text_color)
+        button_text_rect = button_text.get_rect(center=self.rect.center)
+        screen.blit(button_text, button_text_rect)
+
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
+
+# Start screen
+def start_screen():
+    start_button = Button(
+        screen_width // 2 - 100,
+        screen_height // 2 - 25,
+        200,
+        50,
+        "Start",
+        (255, 255, 255),
+        (0, 0, 255)
+    )
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if start_button.is_clicked(event.pos):
+                    return
+
+        screen.fill((255, 255, 255))
+        start_button.draw()
+        pygame.display.flip()
+
+# Pause menu
+def pause_menu():
+    resume_button = Button(
+        screen_width // 2 - 100,
+        screen_height // 2 - 50,
+        200,
+        50,
+        "Resume",
+        (255, 255, 255),
+        (0, 0, 255)
+    )
+    quit_button = Button(
+        screen_width // 2 - 100,
+        screen_height // 2 + 50,
+        200,
+        50,
+        "Quit",
+        (255, 255, 255),
+        (0, 0, 255)
+    )
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if resume_button.is_clicked(event.pos):
+                    return
+                elif quit_button.is_clicked(event.pos):
+                    return "QUIT"
+
+        screen.fill((255, 255, 255))
+        resume_button.draw()
+        quit_button.draw()
+        pygame.display.flip()
+
+# End screen
