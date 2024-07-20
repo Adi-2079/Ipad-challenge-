@@ -1,2 +1,2 @@
-# Ipad challenge 
- Ipad challenge
+# Mathematics game 
+Creating mathematics game to aid students 
