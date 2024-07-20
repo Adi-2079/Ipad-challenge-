@@ -157,3 +157,66 @@ def pause_menu():
         pygame.display.flip()
 
 # End screen
+def end_screen(correct_answers, total_questions):
+    screen.fill((255, 255, 255))
+    end_text = font.render("You answered {} out of {} questions correctly.".format(correct_answers, total_questions),
+                           True, (0, 0, 0))
+    end_rect = end_text.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
+    screen.blit(end_text, end_rect)
+    
+    restart_text = font.render("Press ENTER to restart", True, (0, 0, 0))
+    restart_rect = restart_text.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+    screen.blit(restart_text, restart_rect)
+    pygame.display.flip()
+    
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                return
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    return
+
+# Main game loop
+def game_loop():
+    correct_answers = 0
+    
+    # Loop through the questions
+    for question, answer in questions:
+        # Ask the question
+        user_answer = ask_question(question, answer)
+        
+        # Check if the user wants to pause the game
+        if user_answer == "PAUSE":
+            pause_result = pause_menu()
+            if pause_result == "QUIT":
+                return
+
+        # Check the answer
+        if user_answer == answer:
+            feedback = "Correct!"
+            correct_answers += 1
+        else:
+            feedback = "Incorrect. The correct answer is " + answer
+
+        # Display feedback and correct answer
+        screen.fill((255, 255, 255))
+        feedback_text = font.render(feedback, True, (0, 0, 0))
+        feedback_rect = feedback_text.get_rect(center=(screen_width // 2, screen_height // 2 - 50))
+        screen.blit(feedback_text, feedback_rect)
+
+        correct_answer_text = font.render("The correct answer is " + answer, True, (0, 0, 0))
+        correct_answer_rect = correct_answer_text.get_rect(center=(screen_width // 2, screen_height // 2 + 50))
+        screen.blit(correct_answer_text, correct_answer_rect)
+        pygame.display.flip()
+
+        time.sleep(2)  # Pause for 2 seconds
+    
+    # Show the end screen
+    end_screen(correct_answers, len(questions))
+
+# Run the app
+while True:
+    start_screen()
+    game_loop()
